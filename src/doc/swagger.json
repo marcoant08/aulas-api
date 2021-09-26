@@ -1,0 +1,1028 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Documentação Tindin API",
+    "description": "Educação Financeira Gamificada - Finanças na prática para todas as crianças",
+    "version": "1.0",
+    "contact": {
+      "email": "marcoant008@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333/",
+      "description": "API de Testes"
+    }
+  ],
+  "paths": {
+    "/users/create": {
+      "post": {
+        "summary": "Criar um usuário",
+        "description": "Em caso de sucesso, o usuário receberá um token JWT.",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "Criar": {
+                  "value": {
+                    "name": "marcoant",
+                    "email": "marcoant@gmail.com",
+                    "password": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Usuário não criado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Campos ausentes": {
+                    "value": {
+                      "error": "One or more missing fields"
+                    }
+                  },
+                  "Usuário já cadastrado": {
+                    "value": {
+                      "error": "User already exists"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Usuário criado": {
+                    "value": {
+                      "user": {
+                        "name": "marcoant",
+                        "email": "marcoant@gmail.com",
+                        "date_created": "2021-09-06T19:52:52.393Z",
+                        "_id": "613671a4957867db242b02d5",
+                        "date_updated": "2021-09-06T19:52:52.393Z",
+                        "__v": 0
+                      },
+                      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTM2NzFhNDk1Nzg2N2RiMjQyYjAyZDUiLCJpYXQiOjE2MzA5NTc5ODgsImV4cCI6MTYzMDk2NTE4OH0.ew1ZQknESFM6dFAhQkSW82z-w5NIssdeOay6KDIdfGM"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "summary": "Logar com um usuário",
+        "description": "Em caso de sucesso, o usuário receberá um token JWT.",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              },
+              "examples": {
+                "Logar": {
+                  "value": {
+                    "email": "marcoant@gmail.com",
+                    "password": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Senha Incorreta": {
+                    "value": {
+                      "error": "Invalid password"
+                    }
+                  },
+                  "Usuário não cadastrado": {
+                    "value": {
+                      "error": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Não encontrado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Usuário não cadastrado": {
+                    "value": {
+                      "error": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Autenticado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Usuário autenticado": {
+                    "value": {
+                      "user": {
+                        "_id": "61365657e26d82c4474b4175",
+                        "name": "marcoant",
+                        "email": "marcoant@gmail.com",
+                        "date_updated": "2021-09-06T17:56:20.313Z",
+                        "__v": 0
+                      },
+                      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MTM2NTY1N2UyNmQ4MmM0NDc0YjQxNzUiLCJpYXQiOjE2MzA5NTczMjMsImV4cCI6MTYzMDk2NDUyM30.z2mRq91Z-2opCooTk8wrh-pMD_1qu24UbBIfXgaO7ko"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classes": {
+      "post": {
+        "summary": "Criar uma nova aula",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Cadastra uma Nova aula no banco de dados",
+        "tags": ["Class"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Class"
+              },
+              "examples": {
+                "Criar": {
+                  "value": {
+                    "name": "Aula 1",
+                    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                    "video": "youtu.be/L1nkTe5te",
+                    "data_init": "2021-09-12T08:00:00Z",
+                    "data_end": "2021-09-12T22:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Senha Incorreta": {
+                    "value": {
+                      "error": "Invalid password"
+                    }
+                  },
+                  "Usuário não cadastrado": {
+                    "value": {
+                      "error": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Campo(s) ausente(s)",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Algum campo não foi enviado": {
+                    "value": {
+                      "error": "One or more missing fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Aula criada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aula criada": {
+                    "value": {
+                      "class": {
+                        "name": "Aula 1",
+                        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "video": "youtu.be/L1nkTe5te",
+                        "data_init": "2021-09-12T08:00:00.000Z",
+                        "data_end": "2021-09-12T22:00:00.000Z",
+                        "total_comments": 0,
+                        "_id": "61367705b6dc71b420f9dff3",
+                        "date_created": "2021-09-06T20:16:05.889Z",
+                        "date_updated": "2021-09-06T20:16:05.889Z",
+                        "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Listar aulas cadastradas",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Será apresenada uma lista de aulas cadastradas",
+        "tags": ["Class"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "description": "número da página a ser exibida (página inicial: 0)"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Senha Incorreta": {
+                    "value": {
+                      "error": "Invalid password"
+                    }
+                  },
+                  "Usuário não cadastrado": {
+                    "value": {
+                      "error": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetro de paginação inválido",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Parâmetro page inválido": {
+                    "value": {
+                      "error": "Query parameter error: page must be a number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Aulas encontradas",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aulas encontradas": {
+                    "value": {
+                      "current_page": 0,
+                      "current_length": 1,
+                      "total_length": 1,
+                      "classes": [
+                        {
+                          "_id": "613657fdfefb2146e9271068",
+                          "name": "Primeira aula",
+                          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                          "video": "youtu.be/test",
+                          "data_init": "2021-09-11T08:00:00.000Z",
+                          "data_end": "2021-09-12T22:00:00.000Z",
+                          "date_created": "2021-09-06T18:03:41.330Z",
+                          "date_updated": "2021-09-06T23:00:26.027Z",
+                          "total_comments": 4,
+                          "last_comment": "heiiin aula!",
+                          "last_comment_date": "2021-09-06T23:00:26.020Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classes/{id_class}": {
+      "get": {
+        "summary": "Obter detalhes de uma aula pelo o id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Serão apresentados os dados de uma única aula",
+        "tags": ["Class"],
+        "parameters": [
+          {
+            "name": "id_class",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Id da aula que se dejesa buscar",
+            "required": true
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Aula não encontrada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aula não encontrada": {
+                    "value": {
+                      "error": "Class not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Senha Incorreta": {
+                    "value": {
+                      "error": "Invalid password"
+                    }
+                  },
+                  "Usuário não cadastrado": {
+                    "value": {
+                      "error": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Aula encontrada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aula encontrada": {
+                    "value": {
+                      "class": {
+                        "_id": "613657fdfefb2146e9271068",
+                        "name": "Primeira aula",
+                        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "video": "youtu.be/test",
+                        "data_init": "2021-09-11T08:00:00.000Z",
+                        "data_end": "2021-09-12T22:00:00.000Z",
+                        "date_created": "2021-09-06T18:03:41.330Z",
+                        "date_updated": "2021-09-06T20:41:26.342Z",
+                        "total_comments": 6,
+                        "comments": [
+                          {
+                            "_id": "6136661dafb8ae1d9f1f4fcc",
+                            "id_class": "613657fdfefb2146e9271068",
+                            "comment": "ótima aula",
+                            "date_created": "2021-09-06T19:03:57.150Z",
+                            "date_updated": "2021-09-06T19:03:57.150Z",
+                            "__v": 0
+                          },
+                          {
+                            "_id": "61365f58efa2838abcdec6d0",
+                            "id_class": "613657fdfefb2146e9271068",
+                            "comment": "bela aula",
+                            "date_created": "2021-09-06T18:35:04.145Z",
+                            "date_updated": "2021-09-06T18:35:04.145Z",
+                            "__v": 0
+                          },
+                          {
+                            "_id": "61365903fefb2146e927108a",
+                            "id_class": "613657fdfefb2146e9271068",
+                            "comment": "formosa aula",
+                            "date_created": "2021-09-06T18:08:03.247Z",
+                            "date_updated": "2021-09-06T18:08:03.247Z",
+                            "__v": 0
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar o cadastro de uma aula",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Os campos enviados serão atualizados no banco de dados",
+        "tags": ["Class"],
+        "parameters": [
+          {
+            "name": "id_class",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Id da aula que se dejesa atualizar",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Class"
+              },
+              "examples": {
+                "Atualizar": {
+                  "value": {
+                    "name": "Primeira aula",
+                    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                    "video": "youtu.be/L1nkTe5te",
+                    "data_init": "2021-09-12T08:00:00Z",
+                    "data_end": "2021-09-12T22:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Aula não encontrada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aula não encontrada": {
+                    "value": {
+                      "error": "Class 613657fdfefb2146e92710683 not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Senha Incorreta": {
+                    "value": {
+                      "error": "Invalid password"
+                    }
+                  },
+                  "Usuário não cadastrado": {
+                    "value": {
+                      "error": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Ausencia de campos válidos",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Nenhum campo válido foi enviado": {
+                    "value": {
+                      "error": "Missing valid fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Aula atualizada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aula criada": {
+                    "value": {
+                      "class": {
+                        "_id": "613657fdfefb2146e9271068",
+                        "name": "Primeira aula",
+                        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "video": "youtu.be/test",
+                        "data_init": "2021-09-11T08:00:00.000Z",
+                        "data_end": "2021-09-12T22:00:00.000Z",
+                        "total_comments": 2,
+                        "date_created": "2021-09-06T18:03:41.330Z",
+                        "date_updated": "2021-09-06T20:41:26.342Z",
+                        "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir o cadastro de uma aula",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Excluir o cadastro de uma aula no banco de dados",
+        "tags": ["Class"],
+        "parameters": [
+          {
+            "name": "id_class",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Id da aula que se dejesa deletar",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Senha Incorreta": {
+                    "value": {
+                      "error": "Invalid password"
+                    }
+                  },
+                  "Usuário não cadastrado": {
+                    "value": {
+                      "error": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Aula não encontada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aula inexistente": {
+                    "value": {
+                      "error": "Class 613651e13a1855a0bfcbe4fe not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Aula deletada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aula deletada": {
+                    "value": {
+                      "message": "Class 613681199fb281348a8c9a4f was deleted."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classes/{id_class}/comments": {
+      "post": {
+        "summary": "Cadastrar um comentário de uma aula",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Cadastrar comentário em uma aula",
+        "tags": ["Comment"],
+        "parameters": [
+          {
+            "name": "id_class",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Id da aula que se dejesa atualizar",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Comment"
+              },
+              "examples": {
+                "Comentar": {
+                  "value": {
+                    "comment": "consagrada aula!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Aula não encontrada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aula não encontrada": {
+                    "value": {
+                      "error": "Class 613657fdfefb2a146e9271068 not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Senha Incorreta": {
+                    "value": {
+                      "error": "Invalid password"
+                    }
+                  },
+                  "Usuário não cadastrado": {
+                    "value": {
+                      "error": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Ausencia de campos válidos",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Campo comment ausente": {
+                    "value": {
+                      "error": "Missing fields: comment"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Comentário postado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Comentário postado": {
+                    "value": {
+                      "comment": {
+                        "id_class": "613657fdfefb2146e9271068",
+                        "comment": "consagrada aula!",
+                        "_id": "61368188060c36679a01aa9d",
+                        "date_created": "2021-09-06T21:00:56.660Z",
+                        "date_updated": "2021-09-06T21:00:56.660Z",
+                        "__v": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Listar todos os comentários de uma aula",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Lista todos os comentários de uma aula",
+        "tags": ["Comment"],
+        "parameters": [
+          {
+            "name": "id_class",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Id da aula que se dejesa atualizar",
+            "required": true
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "description": "número da página a ser exibida (página inicial: 0)"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Aula não encontrada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aula não encontrada": {
+                    "value": {
+                      "error": "Class 61368889593a95fbc3e4489c not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetro de paginação inválido",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Parâmetro page inválido": {
+                    "value": {
+                      "error": "Query parameter error: page must be a number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Senha Incorreta": {
+                    "value": {
+                      "error": "Invalid password"
+                    }
+                  },
+                  "Usuário não cadastrado": {
+                    "value": {
+                      "error": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Comentários encontrados",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Comentários encontrados": {
+                    "value": {
+                      "current_page": 0,
+                      "current_length": 2,
+                      "total_length": 2,
+                      "comments": [
+                        {
+                          "_id": "6136a2f13e977af9df4c26da",
+                          "id_class": "613657fdfefb2146e9271068",
+                          "comment": "heiiin aula!",
+                          "date_created": "2021-09-06T23:23:29.348Z",
+                          "date_updated": "2021-09-06T23:23:29.348Z",
+                          "__v": 0
+                        },
+                        {
+                          "_id": "6136a2f23e977af9df4c26de",
+                          "id_class": "613657fdfefb2146e9271068",
+                          "comment": "heiiin aula!",
+                          "date_created": "2021-09-06T23:23:30.309Z",
+                          "date_updated": "2021-09-06T23:23:30.309Z",
+                          "__v": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classes/{id_class}/comments/{id_comment}": {
+      "delete": {
+        "summary": "Excluir o cadastro de uma aula",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Excluir o cadastro de uma aula no banco de dados",
+        "tags": ["Comment"],
+        "parameters": [
+          {
+            "name": "id_class",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Id da aula que se dejesa atualizar",
+            "required": true
+          },
+          {
+            "name": "id_comment",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Id da aula que se dejesa atualizar",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Não autorizado",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Senha Incorreta": {
+                    "value": {
+                      "error": "Invalid password"
+                    }
+                  },
+                  "Usuário não cadastrado": {
+                    "value": {
+                      "error": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Aula não encontada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Comentário inexistente": {
+                    "value": {
+                      "error": "Comment 613651e13a1855a0bfcbe4fe not found"
+                    }
+                  },
+                  "Aula inexistente": {
+                    "value": {
+                      "error": "Class 613688bc593a95fbc3e448a8 not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Aula deletada",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Aula deletada": {
+                    "value": {
+                      "message": "Class 613681199fb281348a8c9a4f was deleted."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Login": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email do usuário"
+          },
+          "password": {
+            "type": "string",
+            "description": "Senha do usuário"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do usuário"
+          },
+          "email": {
+            "type": "string",
+            "description": "E-mail do usuário"
+          },
+          "password": {
+            "type": "string",
+            "description": "Senha do usuário"
+          }
+        }
+      },
+      "Class": {
+        "type": "object",
+        "required": ["name", "description", "video", "data_init", "data_end"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome da aula"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição da aula"
+          },
+          "video": {
+            "type": "string",
+            "description": "URL do vídeo da aula"
+          },
+          "data_init": {
+            "type": "date",
+            "description": "Data que a aula estará disponível"
+          },
+          "data_end": {
+            "type": "date",
+            "description": "Data que a aula não estará mais disponível"
+          },
+          "total_comments": {
+            "type": "number",
+            "description": "Total de comentários que a aula tem"
+          }
+        }
+      },
+      "Comment": {
+        "type": "object",
+        "required": ["comment"],
+        "properties": {
+          "comment": {
+            "type": "string",
+            "description": "Comentário a ser apresentado na aula"
+          }
+        }
+      }
+    }
+  }
+}
