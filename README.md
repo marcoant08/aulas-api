@@ -1,7 +1,13 @@
 # aulas-api
+## Stack
+- Node.js
+- TypeScript
+- Express
+- MongoDB
+- Jest
+- Documentação Swagger (OpenAPI 3)
 
 ## Informações
-
 - A URL base da aplicação é `http://localhost:3333/`
 - Para autenticação do usuário são utilizados tokens JWT (Authorizarion Bearer Token).
 - 3 testes unitários foram implementados (Jest).
